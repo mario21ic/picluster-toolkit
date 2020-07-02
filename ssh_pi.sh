@@ -1,4 +1,8 @@
 #!/bin/bash
+# Usage: ./ssh_pi.sh master|workers command
+# Example: ./ssh_pi.sh docker container ls
+# Example: ./ssh_pi.sh master docker node ls
+# Example: ./ssh_pi.sh workers free -m
 
 CMD=$@
 ips=(192.168.1.200 192.168.1.201 192.168.1.202 192.168.1.203)
@@ -20,6 +24,6 @@ fi
 
 for ip in "${ips[@]}"
 do
-  echo "CMD: ssh pi@${ip} $CMD"
+  echo "### CMD: ssh pi@${ip} $CMD"
   ssh pi@${ip} $CMD
 done
