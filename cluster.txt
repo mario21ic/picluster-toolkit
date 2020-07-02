@@ -1,0 +1,24 @@
+ssh:
+ssh-copy-id pi@192.168.1.201
+ssh pi@192.168.1.201
+
+docker:
+curl -sSL https://get.docker.com | sh
+sudo usermod -aG docker pi
+docker run -p 80:80 nginx:alpine
+
+master:
+docker swarm init
+
+docker service create --name my-nginx-svc --publish=8081:80/tcp nginx:alpine
+docker service scale my-nginx-svc=15
+
+docker service create   --name=viz   --publish=8082:8080/tcp   --constraint=node.role==manager   --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock   alexellis2/visualizer-arm:latest
+
+
+worker:
+docker swarm join --token SWMTKN-1-4lw1h3vbrviykxw0bdgpdehk6l8cziq7bstahv2ycwzcty8sdd-1s8s1ouzu8m38edwyaa3reitc 192.168.1.200:2377
+
+manager:
+docker swarm join --token SWMTKN-1-4lw1h3vbrviykxw0bdgpdehk6l8cziq7bstahv2ycwzcty8sdd-8omc2evmqg62l01x6dcd3242h 192.168.1.200:2377
+

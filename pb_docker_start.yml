@@ -1,0 +1,7 @@
+---
+- name: Docker Swarm start up
+  hosts: all
+  become: true
+  tasks:
+    - name: start docker service
+      service: name=docker state=restarted enabled=yes

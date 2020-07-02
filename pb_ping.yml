@@ -1,0 +1,7 @@
+---
+- name: Task demo
+  hosts: all
+  become: true
+  tasks:
+    - name: ping pong demo
+      action: ping
