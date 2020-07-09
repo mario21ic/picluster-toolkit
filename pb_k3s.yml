@@ -1,0 +1,8 @@
+---
+- name: Start K3S cluster
+  hosts: all
+  become: true
+  tasks:
+    - name: start k3s service
+      service: name=k3s state=restarted enabled=yes
+

@@ -1,0 +1,17 @@
+[Unit]
+Description=Lightweight Kubernetes
+Documentation=https://k3s.io
+After=network-online.target
+
+[Service]
+Type=notify
+ExecStart=k3s agent --server https://192.168.1.200:6443 --token K1098d151b71b94d04926b2565154914c1722cf08afd7640ccdb782c360a05ea6a1::server:d6de18f70bd9f6b1de733f999db37e42
+KillMode=process
+Delegate=yes
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TasksMax=infinity
+
+[Install]
+WantedBy=multi-user.target

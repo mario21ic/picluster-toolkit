@@ -1,0 +1,17 @@
+---
+- name: Monitoring with Prometheus + Grafana
+  hosts: all
+  become: true
+  tasks:
+    - name: start prometheus service
+      service: name=prometheus state=restarted enabled=yes
+      when: ansible_hostname == 'magi0'
+
+    - name: start grafana service
+      service: name=grafana state=restarted enabled=yes
+      when: ansible_hostname == 'magi0'
+
+    - name: start node_exporter service
+      service: name=node_exporter state=restarted enabled=yes
+      when: ansible_hostname != 'magi0'
+
