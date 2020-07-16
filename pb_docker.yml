@@ -1,0 +1,10 @@
+---
+- name: Docker Installation
+  hosts: masters
+  become: true
+  vars:
+    user: "ubuntu"
+    env: "dev"
+  roles:
+    - common
+    - docker
