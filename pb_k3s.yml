@@ -6,3 +6,6 @@
     - name: start k3s service
       service: name=k3s state=restarted enabled=yes
 
+# curl -sfL https://raw.githubusercontent.com/rancher/k3s/master/contrib/util/check-config.sh | sh -
+ cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1
+
