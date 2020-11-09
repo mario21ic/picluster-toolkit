@@ -1,0 +1,80 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: dask-scheduler
+spec:
+  selector:
+    matchLabels:
+      app: dask-scheduler
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dask-scheduler
+    spec:
+      containers:
+      - name: dask-scheduler
+        image: "mario21ic/dask:arm64"
+        imagePullPolicy: IfNotPresent
+        command: ["dask-scheduler"]
+        ports:
+          - containerPort: 8786
+            name: dask
+            protocol: TCP
+          - containerPort: 8787
+            name: dashboard
+            protocol: TCP
+        resources:
+          requests:
+            cpu: "1"
+            memory: "200Mi"
+            #nvidia.com/gpu: 1
+          limits:
+            cpu: "1"
+            memory: "800Mi"
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: dask-worker
+spec:
+  selector:
+    matchLabels:
+      app: dask-worker
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: dask-worker
+    spec:
+      containers:
+      - name: dask-worker
+        image: "mario21ic/dask:arm64"
+        imagePullPolicy: IfNotPresent
+        command: ["dask-worker", "--nthreads", '2', "--no-dashboard", "--memory-limit", "6GB", "--death-timeout", '60', "dask-scheduler-lb:8786"]
+        resources:
+          requests:
+            cpu: "2"
+            memory: "6G"
+            #nvidia.com/gpu: 1
+          limits:
+            cpu: "2"
+            memory: "6G"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: dask-scheduler-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: dask-scheduler
+  ports:
+    - protocol: TCP
+      name: dask
+      port: 8786
+      targetPort: 8786
+    - protocol: TCP
+      name: dashboard
+      port: 8787
+      targetPort: 8787

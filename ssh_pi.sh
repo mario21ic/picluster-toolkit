@@ -24,6 +24,6 @@ fi
 
 for ip in "${ips[@]}"
 do
-  echo "### CMD: ssh pi@${ip} $CMD"
-  ssh pi@${ip} $CMD
+  echo "### CMD: ssh ubuntu@${ip} $CMD"
+  ssh ubuntu@${ip} $CMD
 done
