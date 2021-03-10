@@ -1,12 +1,12 @@
 #!/bin/bash
+set -e
 
-buildah from centos
+buildah from nginx:alpine
 buildah containers
-buildah run centos-working-container yum install httpd -y
-buildah copy centos-working-container index.html /var/www/html/index.html
-buildah config --entrypoint "/usr/sbin/httpd -DFOREGROUND" centos-working-container
+buildah run nginx-working-container apk add --update htop
+buildah copy nginx-working-container index.html /usr/share/nginx/www/
 
-buildah commit centos-working-container mario21ic/centos:httpd
+buildah commit nginx-working-container mario21ic/nginx:buildah
 buildah images
 
 buildah rm --all
