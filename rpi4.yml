@@ -1,0 +1,33 @@
+all:
+  #hosts:
+  #  192.168.1.10:
+  children:
+    masters:
+      hosts:
+        magi0:
+          ansible_ssh_host: 192.168.1.20
+          ansible_ssh_port: 22
+          ansible_ssh_user: ubuntu
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+    workers:
+      hosts:
+        magi1:
+          ansible_ssh_host: 192.168.1.21
+          ansible_ssh_port: 22
+          ansible_ssh_user: ubuntu
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+        magi2:
+          ansible_ssh_host: 192.168.1.22
+          ansible_ssh_port: 22
+          ansible_ssh_user: ubuntu
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+        magi3:
+          ansible_ssh_host: 192.168.1.23
+          ansible_ssh_port: 22
+          ansible_ssh_user: ubuntu
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+        magi3:
+          ansible_ssh_host: 192.168.1.24
+          ansible_ssh_port: 22
+          ansible_ssh_user: ubuntu
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa

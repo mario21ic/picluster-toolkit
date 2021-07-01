@@ -1,0 +1,7 @@
+---
+- name: Shutdown All
+  hosts: all
+  become: true
+  tasks:
+    - name: reboot
+      command: reboot
