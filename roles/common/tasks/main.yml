@@ -2,7 +2,7 @@
 - name: Install common packages
   become: true
   apt:
-    name: ['vim', 'git', 'htop','bzip2', 'wget', 'curl', 'nano', 'lsof', 'net-tools']
+    name: ['tree', 'vim', 'git', 'htop','bzip2', 'unzip', 'wget', 'curl', 'lsof', 'net-tools', 'netcat', 'nmap']
     update_cache: yes
     state: present
     install_recommends: no

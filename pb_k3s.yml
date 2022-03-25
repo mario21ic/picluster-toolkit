@@ -1,12 +1,61 @@
----
-- name: Start K3S cluster
-  hosts: all
-  become: true
-  tasks:
-    - name: start k3s service
-      service: name=k3s state=restarted enabled=yes
-
+#---
+#- name: Start K3S cluster
+#  hosts: all
+#  become: true
+#  tasks:
+#    - name: start k3s service
+#      service: name=k3s state=restarted enabled=yes
 # curl -sfL https://raw.githubusercontent.com/rancher/k3s/master/contrib/util/check-config.sh | sh -
 # sudo vim /boot/firmawre/cmdline.txt
 # cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1
+
+---
+#- name: Install Common
+#  hosts: all
+#  become: true
+#  #remote_user: ec2-user
+#  become_method: sudo
+#  roles:
+#    - common
+
+- name: Install K3S on masters
+  hosts: masters
+  become: true
+  become_method: sudo
+  tasks:
+  - name: simple hostnae
+    command: hostname
+    register: masters_output
+  - debug:
+      var: masters_output.stdout_lines
+
+  - name: install k3s
+    shell: "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=\"--disable traefik\" sh -"
+
+  - name: read k3s token
+    shell: "cat /var/lib/rancher/k3s/server/node-token"
+    register: k3s_token
+  - debug:
+      var: k3s_token.stdout_lines
+  - name: "Add K3S Token to dummy host"
+    add_host:
+      name:   "K3S_TOKEN_HOLDER"
+      token:  "{{ k3s_token.stdout }}"
+
+
+- name: Install K3S on workers
+  hosts: workers
+  become: true
+  become_method: sudo
+  tasks:
+  - name: call hostname
+    command: hostname
+    register: workers_output
+  - debug:
+      var: workers_output.stdout_lines
+
+  #- debug:
+  #    var: hostvars['K3S_TOKEN_HOLDER']['token']
+  - name: install k3s
+    shell: "curl -sfL https://get.k3s.io | K3S_URL=https://192.168.1.50:6443 K3S_TOKEN=\"{{ hostvars['K3S_TOKEN_HOLDER']['token'] }}\" sh -"
 
